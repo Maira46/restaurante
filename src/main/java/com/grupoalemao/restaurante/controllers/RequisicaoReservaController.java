@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador para gerenciar as requisições de reservas.
+ */
 @RestController
 @RequestMapping("/reservas")
 public class RequisicaoReservaController {
@@ -25,6 +28,7 @@ public class RequisicaoReservaController {
 
     /**
      * Retorna a lista de todas as reservas.
+     * 
      * @return uma lista de todas as reservas.
      */
     @GetMapping
@@ -34,6 +38,7 @@ public class RequisicaoReservaController {
 
     /**
      * Retorna uma reserva específica com base no ID fornecido.
+     * 
      * @param id o ID da reserva a ser retornada.
      * @return a reserva com o ID fornecido ou uma resposta de não encontrado.
      */
@@ -46,16 +51,13 @@ public class RequisicaoReservaController {
 
     /**
      * Cria uma nova reserva.
+     * 
      * @param requisicaoReserva o objeto RequisicaoReserva a ser criado.
-     * @return a reserva criada ou uma mensagem de erro se o cliente não for encontrado.
+     * @return a reserva criada.
      */
     @PostMapping
     public ResponseEntity<?> createReserva(@RequestBody RequisicaoReserva requisicaoReserva) {
         Integer clienteId = requisicaoReserva.getCliente().getId();
-        if (clienteId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID do cliente não pode ser nulo");
-        }
-
         Optional<Cliente> clienteOptional = clienteRepository.findById(clienteId);
 
         if (!clienteOptional.isPresent()) {
@@ -69,6 +71,7 @@ public class RequisicaoReservaController {
 
     /**
      * Atualiza uma reserva existente com base no ID fornecido.
+     * 
      * @param id o ID da reserva a ser atualizada.
      * @param reservaDetails o objeto RequisicaoReserva com os detalhes atualizados.
      * @return a reserva atualizada ou uma resposta de não encontrado.
@@ -89,6 +92,7 @@ public class RequisicaoReservaController {
 
     /**
      * Deleta uma reserva com base no ID fornecido.
+     * 
      * @param id o ID da reserva a ser deletada.
      * @return uma resposta OK se a reserva for deletada ou uma resposta de não encontrado.
      */
