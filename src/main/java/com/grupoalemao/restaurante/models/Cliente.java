@@ -1,10 +1,20 @@
 package com.grupoalemao.restaurante.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * Esta classe tem a responsabilidade de armazenar os dados pessoais de um
  * cliente do restaurante.
  */
+@Entity
 public class Cliente {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private static int cod = 0;
     private String nome;
     private String telefone;
@@ -29,6 +39,15 @@ public class Cliente {
             setTelefone(tel);
             Cliente.cod = Cliente.cod + 1;
         }
+    }
+
+    /**
+     * Método que retorna o ID do Cliente.
+     * 
+     * @return Um número inteiro que é o ID do Cliente
+     */
+    public Integer getId() {
+        return id;
     }
 
     /**

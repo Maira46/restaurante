@@ -1,5 +1,6 @@
 package com.grupoalemao.restaurante.models;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
@@ -7,18 +8,34 @@ import java.time.LocalDate;
  * Cada instância desta classe armazena informações sobre a reserva, como data, número de pessoas, cliente associado e mesa reservada.
  * Esta classe controla também o status da reserva.
  */
+@Entity
+@Table(name = "requisicoes_reserva")
 public class RequisicaoReserva {
-    private static int proximoId = 1; 
-    private int id; 
-    private LocalDate dataReserva; 
-    private boolean ativa; 
-    private int pessoas; 
-    private Cliente cliente; 
-    private Mesa mesa; 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false)
+    private LocalDate dataReserva;
+
+    @Column(nullable = false)
+    private boolean ativa;
+
+    @Column(nullable = false)
+    private int pessoas;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Cliente cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "mesa_id", nullable = false)
+    private Mesa mesa;
 
     /**
      * Construtor da classe RequisicaoReserva.
-     * Inicializa uma reserva com os parâmetros fornecidos e gera um identificador único automaticamente.
+     * Inicializa uma reserva com os parâmetros fornecidos.
      * Marca a mesa associada como indisponível.
      * @param dataReserva A data da reserva.
      * @param pessoas O número de pessoas na reserva.
@@ -26,13 +43,16 @@ public class RequisicaoReserva {
      * @param mesa A mesa reservada.
      */
     public RequisicaoReserva(LocalDate dataReserva, int pessoas, Cliente cliente, Mesa mesa) {
-        this.id = proximoId++; 
         this.dataReserva = dataReserva;
-        this.ativa = true; 
+        this.ativa = true;
         this.pessoas = pessoas;
         this.cliente = cliente;
         this.mesa = mesa;
-        this.mesa.setDisponivel(false); 
+        this.mesa.setDisponivel(false);
+    }
+
+    // Construtor vazio necessário para o JPA
+    public RequisicaoReserva() {
     }
 
     // Getters and setters
@@ -82,7 +102,7 @@ public class RequisicaoReserva {
     }
 
     public void cancelar() {
-        this.ativa = false; 
-        this.mesa.liberar(); 
+        this.ativa = false;
+        this.mesa.liberar();
     }
 }
